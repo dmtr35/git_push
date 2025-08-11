@@ -1,0 +1,10 @@
+Usage:
+    python3 script.py <path_to_directory> [--dry-run | -d]
+
+Arguments:
+    <path_to_directory>   Path where the program will search for git repositories.
+    --dry-run, -d         Show which commits would be made, but do not push changes.
+    -h, --help            Show this help message.
+
+Example:
+    python3 script.py /home/user/projects --dry-run
