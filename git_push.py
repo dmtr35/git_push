@@ -23,21 +23,6 @@ class Git_command():
         result = subprocess.run(['git', '-C', repo_path, 'status', '--porcelain'], stdout=subprocess.PIPE, text=True)
         return bool(result.stdout.strip())
     
-    def is_valid_git_repo(self, repo_path):
-        """Проверяет, что это рабочий Git-репозиторий с доступом к origin."""
-        try:
-            # 1. Проверяем, что есть origin
-            subprocess.run(['git', '-C', repo_path, 'remote', 'get-url', 'origin'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            # 2. Проверяем доступ к удалённому репозиторию (без реального fetch)
-            subprocess.run(['git', '-C', repo_path, 'ls-remote'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            return True
-
-        except subprocess.CalledProcessError as e:
-            print(f"Error checking repo {repo_path}: {e}")
-            return False
-        # except subprocess.CalledProcessError:
-        #     return False
-
     def auto_commit(self, repo_path, flag_dry):
         if flag_dry:
                 print("dry-mode")
@@ -96,20 +81,16 @@ class Git_command():
 def list_dirs(full_path, git):
     list_dirs = []
     for git_dir in full_path.rglob(".git"):
-        print(f"path_dir: {git_dir}")
         if git_dir.is_dir():
             repo_root = git_dir.parent
-            if git.is_valid_git_repo(repo_root):
-                if git.has_changes(repo_root):
-                    list_dirs.append(repo_root)
-                else:
-                    print(f"repo {repo_root} no changes. Skipping.")
-                    print("==============================================")
+            if git.has_changes(repo_root):
+                list_dirs.append(repo_root)
+                print(f"repo {repo_root} added.                      <-----")
+                print("==============================================")
             else:
-                print(f"repo {repo_root} has error")
+                print(f"repo {repo_root} no changes. Skipping.")
                 print("==============================================")
     return list_dirs
-
 
 
 def main():
