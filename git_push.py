@@ -124,7 +124,7 @@ def main():
                 print(f"repo {repo} commited error")
                 print("==============================================")
     else:
-        print(help)
+        print("NO changes!!!")
         exit(0)
 
 
